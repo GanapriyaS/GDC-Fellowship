@@ -1,0 +1,23 @@
+
+
+{% if task %}
+<h1>{{request}}</h1>
+<h1>{{request.GET}}</h1>
+{% else %}
+<h1>No task</h1>
+{% endif %}
+
+<form action="/add-task" method="get">
+<input name="task"></input>
+<button type="submit" >Submit</button>
+</form>
+
+<ul>
+    {% for value in task %}
+    <li>{{ value }}</li>
+    {% endfor %}
+</ul>
+
+{% for value in task %}
+{{forloop.counter}} . {{ value }} <a href="/delete-task/{{forloop.counter}}">Delete Task</a><br>
+{% endfor %}
