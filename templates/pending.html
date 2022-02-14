@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="grid place-items-center h-screen">
+<div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl ">
+    <div class="md:flex">
+        <div class="p-8">
+            <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">TODO TASKS</div>
+            <p  class="block mt-1 text-lg font-medium text-black">PENDING TASKS : {{len}}</p>
+            <p class="mt-2 text-slate-500">{{pending}}</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
