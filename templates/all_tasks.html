@@ -1,0 +1,72 @@
+{% extends "template.html" %}
+
+
+{% block content %}
+
+<section class="relative py-20 2xl:py-40 bg-gray-800">
+    <div class="container px-4 pb-20 mx-auto border-b border-gray-500 max-w-5xl mx-auto">
+        <div class="mb-5 text-center">
+    
+            <h2 class="text-xl font-bold font-heading text-white">Pending Tasks</h2>
+        </div>
+        <div class="pt-5 border-t border-gray-500 overflow-x-auto overflow-y-hidden">
+            <table class="table-auto w-full">
+                <thead>
+                    <tr class="text-lg text-gray-200 text-left font-bold">
+                        <th class="pb-6"></th>
+                        <th class="pb-6 pr-8">Tasks</th>
+                        <th class="pb-6 pr-8">Created at</th>
+                        <th class="pb-6 pr-8">Delete</th>
+                        <th class="pb-6 pr-8">Done</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for task in tasks %}
+                    <tr class="text-lg text-white bg-gray-700">
+                        <td class="py-5 pl-10 text-left text-gray-200">{{forloop.counter}}</td>
+                        <td>{{ task.title }}</td>
+                        <td>{{ task.created_date }}</td>
+                        <td><a href="/delete-task/{{task.id}}"
+                                class="p-2 pb-1 w-full rounded-xl bg-red-500 hover:bg-red-600 text-white  transition duration-200">
+                                <i class='bx bx-trash-alt bx-sm'></i></a></td>
+                        <td><a href="/complete_task/{{task.id}}"
+                                class="p-2 pb-1 w-full rounded-xl bg-green-500 hover:bg-green-600 text-white  transition duration-200">
+                                <i class='bx bx-award bx-sm'></i></a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+    
+        </div>
+    </div>
+    <div class="container px-4 pb-20 mx-auto border-b border-gray-500 max-w-5xl mx-auto">
+        <div class="mb-14 text-center">
+
+            <h2 class="mt-3 text-xl font-bold font-heading text-white">Completed Tasks</h2>
+        </div>
+        <div class="pt-5 border-t border-gray-500 overflow-x-auto overflow-y-hidden">
+            <table class="table-auto w-full mb-10">
+                <thead>
+                    <tr class="text-lg text-gray-200 text-left font-bold">
+                        <th class="pb-6"></th>
+                        <th class="pb-6 pr-8">Tasks</th>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for task in completed_tasks %}
+                    <tr class="text-lg text-white bg-gray-700">
+                        <td class="py-5 pl-10 text-left text-gray-200">{{forloop.counter}}</td>
+                        <td>{{ task.title }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}

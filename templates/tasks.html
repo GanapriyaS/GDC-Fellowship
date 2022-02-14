@@ -1,0 +1,111 @@
+{% extends "template.html" %}
+
+
+{% block content %}
+<section class="relative py-20 2xl:py-40 bg-gray-800 overflow-hidden">
+
+    <div class="relative container px-4 mx-auto">
+        <div class="max-w-5xl mx-auto">
+            <div class="flex flex-wrap items-center ">
+                <div class="w-full lg:w-1/2">
+                    <div class="max-w-md">
+                        <div class="container px-4 pb-20 mx-auto border-b border-gray-500">
+                            <div class="mb-5 text-center">
+
+                                <h2 class="text-xl font-bold font-heading text-white">Pending Tasks</h2>
+                            </div>
+                            <div class="pt-5 border-t border-gray-500 overflow-x-auto overflow-y-hidden">
+                                <table class="table-auto w-full">
+                                    <thead>
+                                        <tr class="text-lg text-gray-200 text-left font-bold">
+                                            <th class="pb-6 pr-5"></th>
+                                            <th class="pb-6 pr-10">Tasks</th>
+                                            <th class="pb-6 pr-10">Created at</th>
+                                            <th class="pb-6 pr-10">Delete</th>
+                                            <th class="pb-6 pr-10">Done</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for task in tasks %}
+                                        <tr class="text-lg text-white bg-gray-700">
+                                            <td class="py-5 pl-10 pr-5 text-left text-gray-200">{{forloop.counter}}</td>
+                                            <td>{{ task.title }}</td>
+                                            <td>{{ task.created_date }}</td>
+                                            <td><a href="/delete-task/{{task.id}}"
+                                                    class="p-2 pb-1 w-full rounded-xl bg-red-500 hover:bg-red-600 text-white  transition duration-200">
+                                                    <i class='bx bx-trash-alt bx-sm'></i></a></td>
+                                            <td><a href="/complete_task/{{task.id}}"
+                                                    class="p-2 pb-1 w-full rounded-xl bg-green-500 hover:bg-green-600 text-white  transition duration-200">
+                                                    <i class='bx bx-award bx-sm'></i></a></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+
+                        <div class="container px-4 pt-10 pb-20 mx-auto border-b border-gray-500">
+                            <div class="mb-5 text-center">
+
+                                <h2 class="text-xl font-bold font-heading text-white">Completed Tasks</h2>
+                            </div>
+                            <div class="pt-5 border-t border-gray-500 overflow-x-auto overflow-y-hidden">
+                                <table class="table-auto w-full">
+                                    <thead>
+                                        <tr class="text-lg text-gray-200 text-left font-bold">
+                                            <th class="pb-6"></th>
+                                            <th class="pb-6 pr-8">Tasks</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for task in completed_tasks %}
+                                        <tr class="text-lg text-white bg-gray-700">
+                                            <td class="py-5 pl-10 text-left text-gray-200">{{forloop.counter}}</td>
+                                            <td>{{ task.title }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full lg:w-1/2 px-4">
+                    <div class="px-6 lg:px-20 py-12 lg:py-24 bg-gray-600 rounded-lg">
+                        <form action="" method='GET'>
+                            <h3 class="mb-10 text-2xl text-white font-bold font-heading">Search Task</h3>
+                            <div class="flex items-center pl-6 mb-3 bg-white rounded-full">
+                        
+                                <input class="w-full pl-4 pr-6 py-4 font-bold placeholder-gray-900 rounded-r-full focus:outline-none"
+                                    type="text" placeholder="Enter Task" name="search">
+                            </div>
+                        
+                        
+                        
+                            <button class="py-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-full transition duration-200">
+                                Search</button>
+                        </form><br><br>
+                        <form action="/add-task" method='GET'>
+                            <h3 class="mb-10 text-2xl text-white font-bold font-heading">Add Task</h3>
+                            <div class="flex items-center pl-6 mb-3 bg-white rounded-full">
+
+                                <input
+                                    class="w-full pl-4 pr-6 py-4 font-bold placeholder-gray-900 rounded-r-full focus:outline-none"
+                                    type="text" placeholder="Enter Task" name="task">
+                            </div>
+
+
+
+                            <button
+                                class="py-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-full transition duration-200">
+                                Add</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
