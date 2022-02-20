@@ -14,40 +14,13 @@
             <a class="text-2xl text-white font-bold" href="#">
                 Task Manager
             </a>
-            <button class="p-2 navbar-burger" onclick="menu_toggle()">
-                <svg class="w-10 h-3" width="39" height="13" viewbox="0 0 39 13" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <rect width="39" height="2" rx="1" fill="#C4C4C4"></rect>
-                    <rect x="19" y="11" width="20" height="2" rx="1" fill="#C4C4C4"></rect>
-                </svg>
-            </button>
+        <a href="{% block link %}{% endblock %}"
+            class="btn inline-block px-3 lg:px-6 py-2.5 text-blue-900 bg-blue-100 hover:bg-blue-200 leading-tight uppercase rounded shadow-md hover:shadow-lg focus:bg-blue-700  focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out flex items-center"
+            type="submit" id="button-addon2">
+            <b>{% block tab %}{% endblock %}</b>
+        </a>
         </nav>
-        <div class=" hidden navbar-menu fixed top-0 left-0 bottom-0 w-5/6 max-w-sm z-50" id="menu">
-           
-            <nav class="relative flex flex-col py-8 h-full  bg-white border-gray-800 border-2 overflow-y-auto">
-                <div class="flex items-center mb-16 pr-6">
-                    <a class="ml-10 text-2xl text-gray-800 font-bold" href="#">
-                        Task Manager
-                    </a>
-                </div>
-                <div>
-                    <ul>
-                        <li class="mb-1 px-10"><a class="block pl-8 py-4 text-xl text-gray-800 hover:bg-blueGray-50 rounded-xl"
-                                href="/">Add Tasks</a></li>
-                        <li class="mb-1 px-10"><a
-                                class="block pl-8 py-4 text-xl text-gray-800 hover:bg-blueGray-50 rounded-xl"
-                                href="/completed_tasks">Completed Tasks</a></li>
-                        <li class="mb-1 px-10"><a class="block pl-8 py-4 text-xl text-gray-800 hover:bg-blueGray-50 rounded-xl"
-                                href="/tasks">Pending Tasks</a></li>
-                        <li class="mb-1 px-10"><a
-                                class="block pl-8 py-4 text-xl text-gray-800 hover:bg-blueGray-50 rounded-xl"
-                                href="/all_tasks">All Tasks</a></li>
-                      
-                    </ul>
-                </div>
-           
-            </nav>
-        </div>
+        
     </section>
 
 {% block content %}{% endblock %}
