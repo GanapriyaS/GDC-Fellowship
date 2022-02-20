@@ -17,7 +17,8 @@
                     <div class="px-6 lg:px-20 py-6 lg:py-12 bg-gray-600 rounded-lg">
 
                         <form action="/add-task/" method='POST' onsubmit="return confirm('Are you sure want to add this task?')">
-                            {{ form.non_field_errors }}
+                           
+                            <span class="text-sm text-red-400 hover:text-red-500 font-bold ">{{ form.non_field_errors }}</span>
                            
                           
                             {% csrf_token %}
