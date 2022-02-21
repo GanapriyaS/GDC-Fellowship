@@ -1,0 +1,82 @@
+{% extends "template.html" %}
+{% load static %}
+{% block link %}/{% endblock %}
+{% block tab %}HOME{% endblock %}
+{% block content %}
+
+
+<section class=" bg-gray-800 min-h-screen">
+    <div class="container px-4 py-5 mx-auto">
+      
+        
+        <div class="max-w-4xl mx-auto bg-gray-600 px-6 py-6  rounded">
+           
+                    <ul class="text-gray-200">
+                        <li class="flex pb-4 mb-4 border-b border-gray-50 items-center">
+                            <div class="mr-8 hidden lg:block">
+                                <span
+                                    class="flex justify-center items-center w-14 h-14 bg-blue-50 text-gray-900 text-lg font-bold rounded-full"><i
+                                        class='bx bx-task bx-sm'></i></span>
+                            </div>
+                            <div class="lg:grid lg:grid-cols-4 lg:justify-between w-full items-center">
+                                <h3 class="mb-3 lg:mb-0  text-lg font-bold font-heading">Title</h3>
+                                <p class="text-lg lg:col-span-3 lg:border-l lg:border-gray-50 lg:pl-4">{{object.title}}</p>
+                            </div>
+                        </li>
+                        <li class="flex pb-4 mb-4 border-b border-gray-50 items-center">
+                            <div class="mr-8 hidden lg:block">
+                                <span
+                                    class="flex justify-center items-center w-14 h-14 bg-blue-50 text-gray-900 text-lg font-bold rounded-full"><i class='bx bx-message-square-detail bx-sm'></i></span>
+                            </div>
+                            <div class="lg:grid lg:grid-cols-4 lg:justify-between w-full items-center">
+                                <h3 class=" mb-3 lg:mb-0 text-lg font-bold font-heading ">Description </h3>
+                                <p class="text-lg lg:col-span-3 lg:border-l lg:border-gray-50 lg:pl-4">{{object.description}}</p>
+                            </div>
+                        </li>
+
+                        <li class="flex pb-4 mb-4 border-b border-gray-50 items-center">
+                            <div class="mr-8 hidden lg:block">
+                                <span
+                                    class="flex justify-center items-center w-14 h-14 bg-blue-50 text-gray-900 text-lg font-bold rounded-full"><i
+                                        class='bx bx-task-x bx-sm'></i></span>
+                            </div>
+                            <div class="lg:grid lg:grid-cols-4 lg:justify-between w-full items-center">
+                                <h3 class="mb-3 lg:mb-0  text-lg font-bold font-heading">Completed</h3>
+                                <p class="text-lg lg:col-span-3 lg:border-l lg:border-gray-50 lg:pl-4">{% if object.completed == False %} NO {% else %} YES {% endif %}</p>
+                            </div>
+                        </li>
+
+                        
+                        <li class="flex pb-4 mb-4 border-b border-gray-50 items-center">
+                            <div class="mr-8 hidden lg:block">
+                                <span
+                                    class="flex justify-center items-center w-14 h-14 bg-blue-50 text-gray-900 text-lg font-bold rounded-full"><i
+                                        class='bx bx-sort-z-a bx-sm'></i></span>
+                            </div>
+                            <div class="lg:grid lg:grid-cols-4 lg:justify-between w-full items-center">
+                                <h3 class="mb-3 lg:mb-0  text-lg font-bold font-heading">Priority</h3>
+                                <p class="text-lg lg:col-span-3 lg:border-l lg:border-gray-50 lg:pl-4">{{object.priority}}</p>
+                            </div>
+                        </li>
+
+                        <li class="flex items-center">
+                            <div class="mr-8 hidden lg:block">
+                                <span
+                                    class="flex justify-center items-center w-14 h-14 bg-blue-50 text-gray-900 text-lg font-bold rounded-full"><i
+                                        class='bx bxs-hourglass-top bx-sm'></i></span>
+                            </div>
+                            <div class="lg:grid lg:grid-cols-4 lg:justify-between w-full items-center">
+                                <h3 class="mb-3 lg:mb-0  text-lg font-bold font-heading">Created Date</h3>
+                                <p class="text-lg lg:col-span-3 lg:border-l lg:border-gray-50 lg:pl-4">{{object.created_date}}</p>
+                            </div>
+                        </li>
+
+                        
+                       
+                    </ul>
+         
+            
+        </div>
+    </div>
+</section>
+{% endblock %}
