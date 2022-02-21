@@ -135,12 +135,39 @@ class TaskCreateForm(ModelForm):
         )
 
 
+# function to cascade the priority
+def cascade_priority(temp, user, id):
+    tasks = Task.objects.filter(
+        deleted=False,
+        user=user,
+        completed=False,
+    ).exclude(id=id)
+    if tasks.filter(priority=temp).exists():
+        changes = []
+        while tasks.filter(priority=temp).exists():
+            # task = tasks.get(priority=temp)
+            task = tasks.filter(priority=temp).order_by("id").first()
+            task.priority = temp + 1
+            changes.append(task)
+            temp += 1
+        Task.objects.bulk_update(changes, ["priority"])
+
+
 # To update a tasks
 class GenericTaskUpdateView(AuthorisedTaskManager, UpdateView):
-    model = Task
+
     form_class = TaskCreateForm
     template_name = "update.html"
     success_url = "/"
+
+    def form_valid(self, form):
+        self.object = form.save()
+
+        if not self.object.completed:
+            cascade_priority(self.object.priority, self.request.user, self.object.id)
+
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
 
 
 # Create a new task
@@ -149,28 +176,11 @@ class GenericTaskCreateView(LoginRequiredMixin, CreateView):
     template_name = "add.html"
     success_url = "/"
 
-    def recursion(self, key, id):
-        key = int(key)
-        prior_task = Task.objects.filter(
-            priority=key, deleted=False, user=self.request.user
-        )
-        if prior_task.exists():
-            self.recursion(key + 1, prior_task[0].id)
-        Task.objects.filter(id=id).update(priority=key)
-
     def form_valid(self, form):
         self.object = form.save()
-        tasks = Task.objects.filter(
-            deleted=False,
-            user=self.request.user,
-            priority=self.object.priority,
-        )
 
-        if tasks.exists():
-            self.recursion(self.object.priority, tasks[0].id)
-            Task.objects.filter(id=tasks[0].id).update(
-                priority=int(self.object.priority) + 1
-            )
+        if not self.object.completed:
+            cascade_priority(self.object.priority, self.request.user, self.object.id)
 
         self.object.user = self.request.user
         self.object.save()
