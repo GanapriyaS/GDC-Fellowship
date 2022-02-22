@@ -142,14 +142,15 @@ def cascade_priority(temp, user, id):
         user=user,
         completed=False,
     ).exclude(id=id)
-    if tasks.filter(priority=temp).exists():
+    task = tasks.filter(priority=temp).first()
+
+    if task:
         changes = []
-        while tasks.filter(priority=temp).exists():
-            # task = tasks.get(priority=temp)
-            task = tasks.filter(priority=temp).order_by("id").first()
+        while task:
             task.priority = temp + 1
             changes.append(task)
             temp += 1
+            task = tasks.filter(priority=temp).first()
         Task.objects.bulk_update(changes, ["priority"])
 
 
