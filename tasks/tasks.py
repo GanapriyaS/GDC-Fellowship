@@ -3,6 +3,7 @@ import time
 
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
+from django.http import HttpResponse
 from tasks.models import Task
 from datetime import timedelta
 
@@ -24,9 +25,17 @@ def send_email_remainder():
         print(f"Completed Processing User {user.id}")
 
 
+# registered in celery to run background synchronouslys
 @app.task
 def test_background_jobs():
     print("THis is from the bg")
     for i in range(10):
         time.sleep(1)
         print(i)
+
+
+# # in url.py or views.py
+# def test_bg(request):
+#     test_background_jobs.delay()
+#     # delay() used to make background task
+#     return HttpResponse("here good")
