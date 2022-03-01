@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css">
+<link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <title>Task Manager</title>
+</head>
+<body>
+    <section class="py-8 px-4 lg:px-10 bg-gray-800">
+        <nav class="relative flex justify-between items-center">
+            <a class="text-2xl text-white font-bold" href="#">
+                Task Manager
+            </a>
+        <a href="{% block link %}{% endblock %}"
+            class="btn inline-block px-3 lg:px-6 py-2.5 text-blue-900 bg-blue-100 hover:bg-blue-200 leading-tight uppercase rounded shadow-md hover:shadow-lg focus:bg-blue-700  focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out flex items-center"
+            type="submit" id="button-addon2">
+            <b>{% block tab %}{% endblock %}</b>
+        </a>
+        </nav>
+        
+    </section>
+
+{% block content %}{% endblock %}
+{{request.current_time}}
+   
+</body>
+<script>
+    let navbar= document.getElementsByClassName("navbar-burger");
+    
+    function menu_toggle(){
+
+    document.getElementById( "menu" ).classList.toggle("hidden");
+    }
+ 
+</script>
+</html>
