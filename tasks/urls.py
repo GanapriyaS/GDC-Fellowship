@@ -10,8 +10,14 @@ from tasks.views import (
     UserCreateView,
     UserLoginView,
 )
-from tasks.apiviews import TaskListAPI
+from tasks.apiviews import TaskListAPI, TaskViewSet
 from django.contrib.auth.views import LogoutView
+
+from rest_framework.routers import SimpleRouter
+
+router = SimpleRouter()
+
+router.register("api/task", TaskViewSet)
 
 urlpatterns = [
     path("", GenericTaskView.as_view()),
@@ -25,4 +31,4 @@ urlpatterns = [
     path("sessiontest/", session_storage_view),
     path("user/signup/", UserCreateView.as_view(), name="signup"),
     path("user/logout/", LogoutView.as_view(), name="logout"),
-]
+] + router.urls
