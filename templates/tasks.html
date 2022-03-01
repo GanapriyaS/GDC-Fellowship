@@ -1,0 +1,494 @@
+{% extends "base.html" %}
+
+{% block link %}/add-task{% endblock %}
+{% block tab %}ADD{% endblock %}
+{% block content %}
+
+<section class="relative  xl:py-5 bg-gray-800 overflow-hidden min-h-screen">
+
+    <div class="relative container px-4 mx-auto">
+
+        <div class="max-w-5xl mx-auto">
+<section class="pb-4 px-4 lg:px-10 bg-gray-800">
+    <div class="relative flex justify-between items-center">
+        <a class="lg:text-4xl text-2xl text-white font-bold" href="#">
+            Hi, {{user}}
+        </a>
+       
+        <a class="lg:text-xl text-blue-500 font-bold " href="/remainder/">
+            Set Remainder
+        </a>
+        <a class="lg:text-xl text-red-500 font-bold " href="/user/logout/">
+            Log out
+        </a>
+        </div>
+
+        <p class=" text-sm text-gray-200 hover:text-white mt-3">{{completed|length}} of {{all|length}} tasks completed</p>
+
+
+</section>
+<div class="flex justify-center bg-gray-800 pb-4">
+
+    <div class="xl:w-96">
+
+        <form action="" method='GET'  >
+            <div class="input-group relative flex flex-row flex-wrap   mb-4">
+
+
+                <input type="search" placeholder="Enter Task" name="search"
+                    class="rounded-l bg-gray-600 form-control relative flex-auto  block px-2 lg:px-3 py-1.5 text-base font-normal text-gray-200 bg-clip-padding  transition ease-in-out m-0  focus:bg-gray-700  focus:outline-none"
+                    placeholder="Search" aria-label="Search" aria-describedby="button-addon2">
+                <button
+                    class="btn inline-block px-3 lg:px-6 py-2.5 bg-blue-500 hover:bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded-r shadow-md hover:shadow-lg focus:bg-blue-700  focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out flex items-center"
+                    type="submit" id="button-addon2">
+                    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="w-4"
+                        role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path fill="currentColor"
+                            d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z">
+                        </path>
+                    </svg>
+                </button>
+
+                
+
+            </div>
+        </form>
+    </div>
+</div>
+            <div class="container px-4  mx-auto ">
+                <div class="mb-5 text-center">
+<button id="all" onclick="show_tasks('all_table','all')" class="transition ease-in-out relative inline-block px-4 py-1 mr-2 font-semibold text-yellow-200 text-yellow-900 bg-yellow-200  rounded leading-tight">
+       
+       All
+ </button>
+
+<button id="pending" onclick="show_tasks('pending_table','pending')" class=" transition ease-in-out relative inline-block px-4 py-1 mr-2 font-semibold text-yellow-200 rounded leading-tight">Pending
+    </button>
+
+<button id="completed" onclick="show_tasks('completed_table','completed')" class="transition ease-in-out relative inline-block px-4 py-1 mr-2 font-semibold text-yellow-200 rounded leading-tight">
+       Completed</button>
+                </div>
+
+            </div>
+<div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto transition ease-in-out" id="all_table">
+                <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+                    <table class="min-w-full leading-normal">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th
+                                    class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                </th>
+                                <th
+                                    class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Tasks</th>
+                                <th
+                                    class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Created at</th>
+                                <th
+                                    class="px-5 py-3 border-b-2 border-gray-200  text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Delete</th>
+                                <th
+                                    class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Edit</th>
+                                <th
+                                    class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Done</th>
+
+                                <th
+                                    class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Details</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                           
+                            {% for task in tasks %}
+                            {% if task.completed %}
+<tr class="bg-gray-600 text-gray-200">
+    <td class="px-5 py-5 border-b  border-gray-200 text-sm">
+        <p class="whitespace-no-wrap">{{forloop.counter}}</p>
+    </td>
+    <td class="px-5 py-5 border-b border-gray-200 text-red-500 text-sm line-through">
+        <p class="whitespace-no-wrap">{{ task.title }}</p>
+    </td>
+    <td class="px-5 py-5 border-b border-gray-200  text-sm">
+        <p class="whitespace-no-wrap">
+            {{ task.created_date }}
+        </p>
+    </td>
+    <td class="px-5 py-5 border-b border-gray-200 text-sm">
+        <a href="/delete-task/{{task.id}}">
+            <span class="relative inline-block px-3 py-1 font-semibold text-red-900 leading-tight">
+                <span aria-hidden class="absolute inset-0 bg-red-200 rounded-full"></span>
+                <span class="relative"><i class='bx bx-trash-alt bx-sm'></i></span>
+            </span>
+        </a>
+    </td>
+    <td class="px-5 py-5 border-b border-gray-200 text-sm">
+        <a href="/update-task/{{task.id}}">
+            <span class="relative inline-block px-3 py-1 font-semibold text-blue-900 leading-tight">
+                <span aria-hidden class="absolute inset-0 bg-blue-200 rounded-full"></span>
+                <span class="relative"><i class='bx bx-edit-alt bx-sm'></i></span>
+            </span>
+        </a>
+    </td>
+    <td class="px-5 py-5 border-b border-gray-200 text-sm ">
+        <p class="cursor-default">
+            <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                <span aria-hidden class="absolute inset-0 bg-gray-500  rounded-full"></span>
+                <span class="relative"><i class='bx bx-award bx-sm'></i></span>
+            </span>
+        </p>
+    </td>
+    <td class="px-5 py-5 border-b border-gray-200 text-sm">
+        <a href="/detail-task/{{task.id}}">
+            <span class="relative inline-block px-3 py-1 font-semibold text-yellow-900 leading-tight">
+                <span aria-hidden class="absolute inset-0 bg-yellow-200  rounded-full"></span>
+                <span class="relative"><i class='bx bx-comment-detail bx-sm'></i></span>
+            </span>
+        </a>
+    </td>
+</tr>
+                            {% else %}
+
+                            
+                            <tr class="bg-gray-600 text-gray-200">
+                                <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <p class="whitespace-no-wrap">{{forloop.counter}}</p>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200  text-sm">
+                                    <p class="whitespace-no-wrap">{{ task.title }}</p>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200  text-sm">
+                                    <p class="whitespace-no-wrap">
+                                        {{ task.created_date }}
+                                    </p>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <a href="/delete-task/{{task.id}}"  >
+                                        <span
+                                            class="relative inline-block px-3 py-1 font-semibold text-red-900 leading-tight">
+                                            <span aria-hidden class="absolute inset-0 bg-red-200 rounded-full"></span>
+                                            <span class="relative"><i class='bx bx-trash-alt bx-sm'></i></span>
+                                        </span>
+                                    </a>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <a href="/update-task/{{task.id}}">
+                                        <span
+                                            class="relative inline-block px-3 py-1 font-semibold text-blue-900 leading-tight">
+                                            <span aria-hidden class="absolute inset-0 bg-blue-200 rounded-full"></span>
+                                            <span class="relative"><i class='bx bx-edit-alt bx-sm'></i></span>
+                                        </span>
+                                    </a>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <a href="/complete_task/{{task.id}}">
+                                        <span
+                                            class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                                            <span aria-hidden
+                                                class="absolute inset-0 bg-green-200  rounded-full"></span>
+                                            <span class="relative"><i class='bx bx-award bx-sm'></i></span>
+                                        </span>
+                                    </a>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <a href="/detail-task/{{task.id}}">
+                                        <span
+                                            class="relative inline-block px-3 py-1 font-semibold text-yellow-900 leading-tight">
+                                            <span aria-hidden
+                                                class="absolute inset-0 bg-yellow-200  rounded-full"></span>
+                                            <span class="relative"><i class='bx bx-comment-detail bx-sm'></i></span>
+                                        </span>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endif %}
+                            {% empty %}
+                            <tr class="px-5 py-5 border-b border-gray-200 bg-white text-sm ">
+                                <td colspan="7" class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <div class="flex flex-col xs:flex-row items-center xs:justify-between          ">
+                                        <span class="text-xs xs:text-sm text-gray-900">
+                                            No tasks yet
+                                        </span>
+
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                    <div
+                        class="px-5 py-5 bg-gray-100 border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
+                        <div class="inline-flex xs:mt-0">
+
+                            {% if page_obj.has_previous %}
+                            <a class=" text-sm px-4 py-2 font-semibold text-gray-800 bg-gray-300 hover:bg-gray-400 rounded-l hover:text-white"
+                                href="?page=1">&laquo; 1</a>
+                            <a class=" text-sm px-4 py-2 font-semibold text-gray-800 bg-gray-300 hover:bg-gray-400 rounded-r hover:text-white"
+                                href="?page={{ page_obj.previous_page_number }}">prev</a>
+                            &nbsp;
+                            {% endif %}
+
+                            <span
+                                class=" text-sm px-4 py-2 font-semibold text-gray-800 bg-gray-300 hover:bg-gray-400 rounded-md hover:text-white">
+                                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                            </span>
+
+                            {% if page_obj.has_next %}
+                            &nbsp;
+                            <a class=" text-sm px-4 py-2 font-semibold text-gray-800 bg-gray-300 hover:bg-gray-400 rounded-l hover:text-white"
+                                href="?page={{ page_obj.next_page_number }}">next</a>
+                            <a class=" text-sm px-4 py-2 font-semibold text-gray-800 bg-gray-300 hover:bg-gray-400 rounded-r hover:text-white"
+                                href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto transition ease-in-out hidden"
+                id="pending_table">
+                <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+                    <table class="min-w-full leading-normal">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th
+                                    class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                </th>
+                                <th
+                                    class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Tasks</th>
+                                <th
+                                    class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Created at</th>
+                                <th
+                                    class="px-5 py-3 border-b-2 border-gray-200  text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Delete</th>
+                                <th
+                                    class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Edit</th>
+                                <th
+                                    class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Done</th>
+
+                                <th
+                                    class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Details</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            {% for task in pending %}
+
+                            <tr class="bg-gray-600 text-gray-200">
+                                <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <p class="whitespace-no-wrap">{{forloop.counter}}</p>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200  text-sm">
+                                    <p class="whitespace-no-wrap">{{ task.title }}</p>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200  text-sm">
+                                    <p class="whitespace-no-wrap">
+                                        {{ task.created_date }}
+                                    </p>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <a href="/delete-task/{{task.id}}">
+                                        <span
+                                            class="relative inline-block px-3 py-1 font-semibold text-red-900 leading-tight">
+                                            <span aria-hidden class="absolute inset-0 bg-red-200 rounded-full"></span>
+                                            <span class="relative"><i class='bx bx-trash-alt bx-sm'></i></span>
+                                        </span>
+                                    </a>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <a href="/update-task/{{task.id}}">
+                                        <span
+                                            class="relative inline-block px-3 py-1 font-semibold text-blue-900 leading-tight">
+                                            <span aria-hidden class="absolute inset-0 bg-blue-200 rounded-full"></span>
+                                            <span class="relative"><i class='bx bx-edit-alt bx-sm'></i></span>
+                                        </span>
+                                    </a>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <a href="/complete_task/{{task.id}}">
+                                        <span
+                                            class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                                            <span aria-hidden
+                                                class="absolute inset-0 bg-green-200  rounded-full"></span>
+                                            <span class="relative"><i class='bx bx-award bx-sm'></i></span>
+                                        </span>
+                                    </a>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <a href="/detail-task/{{task.id}}">
+                                        <span
+                                            class="relative inline-block px-3 py-1 font-semibold text-yellow-900 leading-tight">
+                                            <span aria-hidden
+                                                class="absolute inset-0 bg-yellow-200  rounded-full"></span>
+                                            <span class="relative"><i class='bx bx-comment-detail bx-sm'></i></span>
+                                        </span>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr class="px-5 py-5 border-b border-gray-200 bg-white text-sm ">
+                                <td colspan="7" class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <div class="flex flex-col xs:flex-row items-center xs:justify-between          ">
+                                        <span class="text-xs xs:text-sm text-gray-900">
+                                            No tasks yet
+                                        </span>
+
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                    <div
+                        class="px-5 py-1  bg-gray-100 border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
+                        <div class="inline-flex xs:mt-0">
+
+                            
+                            <span
+                                class=" text-sm px-4 py-2 font-semibold text-gray-800  rounded-md hover:text-white">
+                                You can do it !! Come on start working !!
+                            </span>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto hidden transition ease-in-out"
+                id="completed_table">
+                <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+                    <table class="min-w-full leading-normal">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th
+                                    class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                </th>
+                                <th
+                                    class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Tasks</th>
+                                <th
+                                    class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Created at</th>
+                                <th
+                                    class="px-5 py-3 border-b-2 border-gray-200  text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Delete</th>
+                                <th
+                                    class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Edit</th>
+                                
+
+                                <th
+                                    class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Details</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            {% for task in completed %}
+
+                            <tr class="bg-gray-600 text-gray-200">
+                                <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <p class="whitespace-no-wrap">{{forloop.counter}}</p>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200  text-sm ">
+                                    <p class="whitespace-no-wrap text-red-500 line-through">{{ task.title }}</p>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200  text-sm">
+                                    <p class="whitespace-no-wrap">
+                                        {{ task.created_date }}
+                                    </p>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <a href="/delete-task/{{task.id}}">
+                                        <span
+                                            class="relative inline-block px-3 py-1 font-semibold text-red-900 leading-tight">
+                                            <span aria-hidden class="absolute inset-0 bg-red-200 rounded-full"></span>
+                                            <span class="relative"><i class='bx bx-trash-alt bx-sm'></i></span>
+                                        </span>
+                                    </a>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <a href="/update-task/{{task.id}}">
+                                        <span
+                                            class="relative inline-block px-3 py-1 font-semibold text-blue-900 leading-tight">
+                                            <span aria-hidden class="absolute inset-0 bg-blue-200 rounded-full"></span>
+                                            <span class="relative"><i class='bx bx-edit-alt bx-sm'></i></span>
+                                        </span>
+                                    </a>
+                                </td>
+                                
+                                <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <a href="/detail-task/{{task.id}}">
+                                        <span
+                                            class="relative inline-block px-3 py-1 font-semibold text-yellow-900 leading-tight">
+                                            <span aria-hidden
+                                                class="absolute inset-0 bg-yellow-200  rounded-full"></span>
+                                            <span class="relative"><i class='bx bx-comment-detail bx-sm'></i></span>
+                                        </span>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr class="px-5 py-5 border-b border-gray-200 bg-white text-sm ">
+                                <td colspan="7" class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <div class="flex flex-col xs:flex-row items-center xs:justify-between          ">
+                                        <span class="text-xs xs:text-sm text-gray-900">
+                                            No tasks yet
+                                        </span>
+
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                <div class="px-5 py-1  bg-gray-100 border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
+                    <div class="inline-flex xs:mt-0">
+                
+                
+                        <span class=" text-sm px-4 py-2 font-semibold text-gray-800  rounded-md hover:text-white">
+                            It's damn awesome ! You have proved that you can do !!
+                        </span>
+                
+                    </div>
+                
+                </div>
+                </div>
+            </div>
+           
+
+        </div>
+    </div>
+</section>
+<script>
+    function show_tasks ( value , classbutton)
+    {
+        document.getElementById( "completed_table" ).style.display = "none";
+        document.getElementById( "all_table" ).style.display = "none";
+        document.getElementById( "pending_table" ).style.display = "none";
+        document.getElementById( value ).style.display = "block";
+        document.getElementById( "completed" ).classList.remove( "text-yellow-900", "bg-yellow-200" );
+        document.getElementById( "pending" ).classList.remove( "text-yellow-900", "bg-yellow-200" );
+        document.getElementById( "all" ).classList.remove( "text-yellow-900", "bg-yellow-200" );
+        document.getElementById( classbutton ).classList.add( "text-yellow-900", "bg-yellow-200" );
+    }
+   
+        var modal = document.getElementById('modal');
+
+        window.onclick = function(event) {
+         if (event.target == modal) {
+            modal.style.display = "none";
+        }
+}
+</script>
+{% endblock %}

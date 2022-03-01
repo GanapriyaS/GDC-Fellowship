@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+{% block link %}/{% endblock %}
+{% block tab %}HOME{% endblock %}
+{% block content %}
+
+
+<section class="relative lg:px-20 xl:py-10 bg-gray-800 overflow-hidden">
+
+    <div class="relative container px-4 mx-auto">
+        
+            <div class="flex flex-wrap items-center justify-center" style="min-height: 85vh;">
+<div class="w-full lg:w-1/2  py-6 px-10">
+    <img src="{% static 'img/login.svg' %}" alt="Login image">
+</div>
+<div class="w-full lg:w-1/2 px-4">
+                    <div class="px-6 lg:px-20 py-6 lg:py-12 bg-gray-600 rounded-lg">
+
+                        <form action="/remainder/" method='POST' onsubmit="return confirm('Are you sure with settings?')">
+                           
+                            <span class="text-sm text-red-400 hover:text-red-500 font-bold ">{{ form.non_field_errors }}</span>
+                           
+                          
+                            {% csrf_token %}
+
+                            <h3 class="mb-10 text-2xl text-white font-bold font-heading">Remainder Task</h3>
+
+                            {% for field in form %}
+                          
+                               
+                                <label for="{{ field.id_for_label }}" class="text-sm text-gray-200 hover:text-white">{{ field.label_tag}}</label>
+                                    <span class="text-sm text-red-400 hover:text-red-500 font-bold ">{{ field.errors }}</span>
+                                 {{ field }}
+                                {% if field.help_text %}
+                                <p class="help">{{ field.help_text|safe }}</p>
+                                {% endif %}
+                            
+                            {% endfor %}
+
+                           
+
+                            <button
+                                class="py-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-full transition duration-200">
+                                Set Remainder</button>
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
