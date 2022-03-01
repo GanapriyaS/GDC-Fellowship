@@ -33,6 +33,19 @@
                                 <p class="text-lg lg:col-span-3 lg:border-l lg:border-gray-50 lg:pl-4">{{object.description}}</p>
                             </div>
                         </li>
+                        
+                        <li class="flex pb-4 mb-4 border-b border-gray-50 items-center">
+                            <div class="mr-8 hidden lg:block">
+                                <span
+                                    class="flex justify-center items-center w-14 h-14 bg-blue-50 text-gray-900 text-lg font-bold rounded-full"><i
+                                        class='bx bx-task-x bx-sm'></i></span>
+                            </div>
+                            <div class="lg:grid lg:grid-cols-4 lg:justify-between w-full items-center">
+                                <h3 class="mb-3 lg:mb-0  text-lg font-bold font-heading">Status</h3>
+                                <p class="text-lg lg:col-span-3 lg:border-l lg:border-gray-50 lg:pl-4">{% if object.status == "0" %} PENDING {% elif object.status == "1" %} IN_PROGRESS {% elif object.status == "2" %} COMPLETED {% else %} CANCELLED {% endif %}</p>
+                            </div>
+                        </li>
+
 
                         <li class="flex pb-4 mb-4 border-b border-gray-50 items-center">
                             <div class="mr-8 hidden lg:block">

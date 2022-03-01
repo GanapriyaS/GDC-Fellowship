@@ -5,7 +5,7 @@ from django.contrib.auth.forms import (
     UsernameField,
 )
 from django.forms import ModelForm, ValidationError
-from tasks.models import Task
+from tasks.models import Task, Report
 
 # Customising signup form
 class UserSignupForm(UserCreationForm):
@@ -97,3 +97,26 @@ class UserLoginForm(AuthenticationForm):
             }
         )
     )
+
+
+# Form to set remainder time
+class EmailReportForm(ModelForm):
+    class Meta:
+        model = Report
+        widgets = {
+            "remainder_time": forms.TimeInput(
+                attrs={
+                    "class": "w-full pl-4 pr-6 py-4 font-bold placeholder-gray-900 rounded mb-4 focus:outline-none",
+                    "placeholder": "HH:MM",
+                }
+            )
+        }
+        fields = ["remainder_time", "disabled"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["disabled"].widget.attrs.update(
+            {
+                "class": "ml-2 mb-4 focus:outline-none",
+            }
+        )

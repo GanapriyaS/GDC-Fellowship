@@ -1,17 +1,18 @@
 # Add all your views here
 
 
+from math import remainder
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 
 from django.http import HttpResponseRedirect
 
-from tasks.forms import UserSignupForm, UserLoginForm, TaskCreateForm
+from tasks.forms import UserSignupForm, UserLoginForm, TaskCreateForm, EmailReportForm
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView, FormView
 from django.views.generic.list import ListView
 
-from tasks.models import Task
+from tasks.models import Task, Report
 
 
 # ==================================== USER VIEWS =================================
@@ -87,6 +88,26 @@ class GenericTaskCreateView(LoginRequiredMixin, CreateView):
 
         self.object.user = self.request.user
         self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+
+# to update or create a remainder
+class GenericTaskEmailReportView(LoginRequiredMixin, FormView):
+    form_class = EmailReportForm
+    template_name = "remainder.html"
+    success_url = "/"
+
+    def form_valid(self, form):
+        user = Report.objects.filter(user=self.request.user)
+        if user:
+            user.update(
+                disabled=form.cleaned_data["disabled"],
+                remainder_time=form.cleaned_data["remainder_time"],
+            )
+        else:
+            self.object = form.save()
+            self.object.user = self.request.user
+            self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
 

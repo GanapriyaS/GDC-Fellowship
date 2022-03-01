@@ -6,6 +6,7 @@ from tasks.views import (
     GenericTaskUpdateView,
     GenericTaskDetailView,
     GenericTaskDeleteView,
+    GenericTaskEmailReportView,
     UserCreateView,
     UserLoginView,
 )
@@ -33,5 +34,6 @@ urlpatterns = [
     path("user/login/", UserLoginView.as_view(), name="login"),
     path("user/signup/", UserCreateView.as_view(), name="signup"),
     path("user/logout/", LogoutView.as_view(), name="logout"),
+    path("remainder/", GenericTaskEmailReportView.as_view(), name="set-remainder"),
     path("", include(nested_router.urls)),
 ] + router.urls

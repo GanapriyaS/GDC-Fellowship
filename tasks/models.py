@@ -4,10 +4,10 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
 STATUS_CHOICES = (
-    ("PENDING", "PENDING"),
-    ("IN_PROGRESS", "IN_PROGRESS"),
-    ("COMPLETED", "COMPLETED"),
-    ("CANCELLED", "CANCELLED"),
+    ("0", "PENDING"),
+    ("1", "IN_PROGRESS"),
+    ("2", "COMPLETED"),
+    ("3", "CANCELLED"),
 )
 
 
@@ -38,6 +38,16 @@ class StatusHistory(models.Model):
 
     def __str__(self):
         return self.task.title
+
+
+class Report(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    remainder_time = models.TimeField()
+    last_day = models.DateField(null=True, default=None, blank=True)
+    disabled = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.user.username
 
 
 # https://docs.djangoproject.com/en/4.0/topics/signals/
