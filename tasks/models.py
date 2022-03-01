@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 STATUS_CHOICES = (
     ("PENDING", "PENDING"),
@@ -33,3 +35,17 @@ class StatusHistory(models.Model):
     old_status = models.CharField(max_length=100, choices=STATUS_CHOICES, null=True)
     new_status = models.CharField(max_length=100, choices=STATUS_CHOICES)
     timestamp = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.task.title
+
+
+# https://docs.djangoproject.com/en/4.0/topics/signals/
+@receiver(pre_save, sender=Task)
+def handler(sender, instance, **kwargs):
+    print(instance)
+    task = Task.objects.filter(id=instance.id).first()
+    if task and task.status != instance.status:
+        StatusHistory.objects.create(
+            task=task, old_status=task.status, new_status=instance.status
+        )

@@ -1,20 +1,18 @@
-from tasks.models import Task
 from django.contrib.auth.models import User
-
 from django_filters.rest_framework import (
-    DjangoFilterBackend,
-    FilterSet,
+    BooleanFilter,
     CharFilter,
     ChoiceFilter,
+    DateFromToRangeFilter,
+    DjangoFilterBackend,
+    FilterSet,
+    ModelChoiceFilter,
 )
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-
-from rest_framework.serializers import ModelSerializer, Serializer
-
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.serializers import ModelSerializer, Serializer
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+
+from tasks.models import StatusHistory, Task
 
 STATUS_CHOICES = (
     ("PENDING", "PENDING"),
@@ -23,10 +21,11 @@ STATUS_CHOICES = (
     ("CANCELLED", "CANCELLED"),
 )
 
-
+# filter tasks
 class TaskFilter(FilterSet):
     title = CharFilter(lookup_expr="icontains")
     status = ChoiceFilter(choices=STATUS_CHOICES)
+    completed = BooleanFilter()
 
 
 # Nested serializer
@@ -43,6 +42,7 @@ class TaskSerializer(ModelSerializer):
     class Meta:
         model = Task
         fields = [
+            "id",
             "title",
             "description",
             "priority",
@@ -50,21 +50,6 @@ class TaskSerializer(ModelSerializer):
             "completed",
             "user",
         ]
-
-
-# class TaskSerializer(Serializer):
-#     task = serializer.CharField(max_length=100)
-#     description = serializer.CharField()
-
-#     def create(self, validated_data):
-#         title = validated_data.get("title")
-#         description = validated_data.get("description")
-#         return Task(title=title, description=description)
-
-#     def update(self, instance, validated_data):
-#         instance.title = validated_data.get("title", instance.title)
-#         instance.description = validated_data.get("description", instance.description)
-#         return instance
 
 
 class TaskViewSet(ModelViewSet):
@@ -85,20 +70,36 @@ class TaskViewSet(ModelViewSet):
         serializer.save(user=self.request.user)
 
 
-# serialize
+# Status history
 
 
-class TaskListAPI(APIView):
-    def get(self, request):
-        tasks = Task.objects.filter(deleted=False)
-        data = TaskSerializer(tasks, many=True).data
-        return Response({"tasks": data})
+class StatusHistorySerializer(ModelSerializer):
+    class Meta:
+        model = StatusHistory
+        fields = "__all__"
 
 
-# class TaskListAPI(APIView):
-#     def get(self, request):
-#         tasks = Task.objects.filter(deleted=False)
-#         data = []
-#         for task in tasks:
-#             data.append({"title": task.title})
-#         return Response({"tasks": data})
+class StatusHistoryFilter(FilterSet):
+    timestamp = DateFromToRangeFilter()
+    old_status = ChoiceFilter(choices=STATUS_CHOICES)
+    new_status = ChoiceFilter(choices=STATUS_CHOICES)
+    # task = ModelChoiceFilter(queryset=Task.objects.filter(deleted=False))
+
+
+class StatusHistoryViewSet(ReadOnlyModelViewSet):
+    queryset = StatusHistory.objects.all()
+    serializer_class = StatusHistorySerializer
+
+    permission_classes = {
+        IsAuthenticated,
+    }
+
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = StatusHistoryFilter
+
+    def get_queryset(self, *args, **kwargs):
+        task_id = self.kwargs.get("task__pk")
+        if task_id:
+            return self.queryset.filter(task__id=task_id, task__user=self.request.user)
+        else:
+            return self.queryset.filter(task__user=self.request.user)

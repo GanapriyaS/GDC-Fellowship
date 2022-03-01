@@ -87,12 +87,6 @@ class UserCreateView(CreateView):
     success_url = "/user/login"
 
 
-def session_storage_view(request):
-    total_views = request.session.get("total_views", 0)
-    request.session["total_views"] = total_views + 1
-    return HttpResponse(f"Total views is {total_views} and the user is {request.user}")
-
-
 # ================================ TASK VIEWS ================================
 
 # Form to get task details
@@ -105,7 +99,7 @@ class TaskCreateForm(ModelForm):
 
     class Meta:
         model = Task
-        fields = ["title", "description", "priority", "completed"]
+        fields = ["title", "description", "priority", "status", "completed"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -128,6 +122,11 @@ class TaskCreateForm(ModelForm):
                 "class": "w-full pl-4 pr-6 py-4 font-bold placeholder-gray-900 rounded mb-4 focus:outline-none",
             }
         )
+        self.fields["status"].widget.attrs.update(
+            {
+                "class": "w-full pl-4 pr-6 py-4 font-bold placeholder-gray-900 rounded mb-4 focus:outline-none",
+            }
+        )
         self.fields["completed"].widget.attrs.update(
             {
                 "class": "ml-2 mb-4 focus:outline-none",
@@ -135,12 +134,40 @@ class TaskCreateForm(ModelForm):
         )
 
 
+# function to cascade the priority
+def cascade_priority(temp, user, id):
+    tasks = Task.objects.filter(
+        deleted=False,
+        user=user,
+        completed=False,
+    ).exclude(id=id)
+    task = tasks.filter(priority=temp).first()
+
+    if task:
+        changes = []
+        while task:
+            task.priority = temp + 1
+            changes.append(task)
+            temp += 1
+            task = tasks.filter(priority=temp).first()
+        Task.objects.bulk_update(changes, ["priority"])
+
+
 # To update a tasks
 class GenericTaskUpdateView(AuthorisedTaskManager, UpdateView):
-    model = Task
+
     form_class = TaskCreateForm
     template_name = "update.html"
     success_url = "/"
+
+    def form_valid(self, form):
+        self.object = form.save()
+
+        if not self.object.completed:
+            cascade_priority(self.object.priority, self.request.user, self.object.id)
+
+        # self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
 
 
 # Create a new task
@@ -149,28 +176,11 @@ class GenericTaskCreateView(LoginRequiredMixin, CreateView):
     template_name = "add.html"
     success_url = "/"
 
-    def recursion(self, key, id):
-        key = int(key)
-        prior_task = Task.objects.filter(
-            priority=key, deleted=False, user=self.request.user
-        )
-        if prior_task.exists():
-            self.recursion(key + 1, prior_task[0].id)
-        Task.objects.filter(id=id).update(priority=key)
-
     def form_valid(self, form):
         self.object = form.save()
-        tasks = Task.objects.filter(
-            deleted=False,
-            user=self.request.user,
-            priority=self.object.priority,
-        )
 
-        if tasks.exists():
-            self.recursion(self.object.priority, tasks[0].id)
-            Task.objects.filter(id=tasks[0].id).update(
-                priority=int(self.object.priority) + 1
-            )
+        if not self.object.completed:
+            cascade_priority(self.object.priority, self.request.user, self.object.id)
 
         self.object.user = self.request.user
         self.object.save()
