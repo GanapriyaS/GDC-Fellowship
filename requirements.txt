@@ -1,0 +1,10 @@
+Django==4.0.1
+djangorestframework==3.13.1
+django-filter==21.1
+drf-nested-routers
+django-rest-framework-nested
+celery==4.4.7
+# sudo apt install python-celery-common
+redis
+coverage==5.0.4
+gunicorn==20.1.0
