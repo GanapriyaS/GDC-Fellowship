@@ -17,9 +17,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Install python-celery-common
-        run: |
-          sudo apt install python-celery-common
       - name: Run Tests with coverage
         run: |
           coverage run manage.py test
