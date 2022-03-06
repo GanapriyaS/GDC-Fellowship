@@ -2,12 +2,14 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
-from django.http import HttpResponse
 from tasks.models import Task, Report
 from datetime import timedelta
 from datetime import datetime, date
 from celery.task import periodic_task
-from task_manager.celery import app
+
+
+# celery -A task_manager beat
+# celery -A task_manager worker
 
 
 @periodic_task(run_every=timedelta(seconds=10))
@@ -29,8 +31,12 @@ def send_email_remainder():
         cancelled_count = all_tasks.filter(status="3").count()
 
         content = f" {pending_count} pending tasks\n {in_progress_count} in-progress tasks {completed_count} Completed tasks \n and {cancelled_count} Cancelled tasks"
-        send_mail("Daily Status Report", content, "tasks@taskmanager.org", [user.email])
+        mail = send_mail(
+            "Daily Status Report", content, "tasks@taskmanager.org", [user.email]
+        )
         print(f"User {user.username} **** Email: {user.email}")
         print("Email received")
         report.last_day = today
         report.save()
+        print(mail)
+    return "Email Recieved"

@@ -45,6 +45,7 @@ class TaskSerializer(ModelSerializer):
             "id",
             "title",
             "description",
+            "status",
             "priority",
             "created_date",
             "completed",

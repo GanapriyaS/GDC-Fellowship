@@ -36,7 +36,7 @@ class UserSignupForm(UserCreationForm):
 class TaskCreateForm(ModelForm):
     def clean_title(self):
         title = self.cleaned_data["title"]
-        if len(title) < 10:
+        if len(title) < 5:
             raise ValidationError("Data too small")
         return title.upper()
 
