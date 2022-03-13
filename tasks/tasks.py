@@ -12,7 +12,7 @@ from celery.task import periodic_task
 # celery -A task_manager worker
 
 
-@periodic_task(run_every=timedelta(seconds=10))
+@periodic_task(run_every=timedelta(seconds=59))
 def send_email_remainder():
     now = datetime.now().strftime("%H:%M")
     print(now)

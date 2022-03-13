@@ -22,6 +22,8 @@ STATUS_CHOICES = (
 )
 
 # filter tasks
+
+
 class TaskFilter(FilterSet):
     title = CharFilter(lookup_expr="icontains")
     status = ChoiceFilter(choices=STATUS_CHOICES)
@@ -37,7 +39,7 @@ class UserSerializer(ModelSerializer):
 
 class TaskSerializer(ModelSerializer):
 
-    user = UserSerializer(read_only=True)
+    # user = UserSerializer(read_only=True)
 
     class Meta:
         model = Task

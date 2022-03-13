@@ -1,10 +1,8 @@
-Django==4.0.1
-djangorestframework==3.13.1
-django-filter==21.1
-drf-nested-routers
-django-rest-framework-nested
-celery==4.4.7
-# sudo apt install python-celery-common
-redis
-coverage==5.0.4
-gunicorn==20.1.0
+# This file is expected by Heroku.
+
+-r requirements/production.txt
+
+# export DATABASE_URL=postgres://vitrcpgjbihjwn:36be79eef47c3382bacc53002c5edd6b779992f3dd7cb9d42f17b45ae2888ce0@ec2-52-70-186-184.compute-1.amazonaws.com:5432/d23epe9abrv448
+# redis-servers
+# celery -A config.celery_app worker --loglevel=info
+# celery -A config.celery_app beat --loglevel=info

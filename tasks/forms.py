@@ -7,8 +7,16 @@ from django.contrib.auth.forms import (
 from django.forms import ModelForm, ValidationError
 from tasks.models import Task, Report
 
+from task_manager.users.models import User
+
 # Customising signup form
+
+
 class UserSignupForm(UserCreationForm):
+    class Meta:
+        model = User  # this is the "YourCustomUser" that you imported at the top of the file
+        fields = ('username', 'password1', 'password2')
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

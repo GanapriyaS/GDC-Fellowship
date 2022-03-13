@@ -1,0 +1,8 @@
+# PostgreSQL
+# ------------------------------------------------------------------------------
+POSTGRES_HOST=ec2-52-70-186-184.compute-1.amazonaws.com
+POSTGRES_PORT=5432
+POSTGRES_DB=d23epe9abrv448
+POSTGRES_USER=vitrcpgjbihjwn
+POSTGRES_PASSWORD=36be79eef47c3382bacc53002c5edd6b779992f3dd7cb9d42f17b45ae2888ce0
+
