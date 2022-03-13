@@ -273,6 +273,5 @@ tags
 task_manager/media/
 
 .pytest_cache/
-.env
-.envs/*
-!.envs/.local/
+
+
